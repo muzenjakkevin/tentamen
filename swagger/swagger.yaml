@@ -1,3 +1,5 @@
+#Jag förstår inte redigt vad som skall göra med post, put, patch och delete
+
 openapi: "3.0.0"
 info:
   version: 1.0.0
@@ -28,11 +30,97 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    post:
+      summary: Add books to the collection
+      operationId: listBooks
+      tags:
+      - books
+      responses:
+        '201':
+          description: Add book
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Insert new and replace an old book
+      operationId: listBooks
+      tags:
+      - books
+      responses:
+        '200':
+          description: Array of books
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseBooks"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      summary: Change information about the book
+      operationId: listBooks
+      tags:
+      - books
+      responses:
+        '200':
+          description: Array of books
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseBooks"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Remove book
+      operationId: listBooks
+      tags:
+      - books
+      responses:
+        '200':
+          description: Array of books
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseBooks"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     Book: # A single book
       type: object
       properties:
+        ISBN: 
+          type: string
+        Title: 
+          type: string
+        Author: 
+          type: string
+        Price: 
+          type: number
+        SellerEmail: 
+          type: string
+        Used: 
+          type: boolean
+        Location:
+          type: object
+          properties:
+            City:
+              type: string
+            Street:
+              type: string
 # Add properties for your books here   
     ResponseBook: #Single book response including _id and __v
       allOf:
