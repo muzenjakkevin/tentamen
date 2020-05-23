@@ -1,9 +1,20 @@
 dotify = require('node-dotify')
 
 get = (req, res, next) => {
-  req.models.Book.find().then((books) => {
+  let search = {}
+  if(req.query.Title){
+    search = {Title: req.query.Title}
+  }
+  if(req.query.Author){
+    search = {Author: req.query.Author}
+  }
+
+
+  req.models.Book.find(search).then((books) => {
       return res.send(books);
-    }).catch((error) => next(error))
+    }).catch((error) => {
+      next(error)
+    })
 }
 
 post = (req, res, next) => {

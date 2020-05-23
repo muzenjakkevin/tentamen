@@ -1,5 +1,3 @@
-#Jag förstår inte redigt vad som skall göra med post, put, patch och delete
-
 openapi: "3.0.0"
 info:
   version: 1.0.0
@@ -13,10 +11,10 @@ servers:
 paths:
   /books:
     get:
-      summary: Lists all books
+      summary: List books
       operationId: listBooks
       tags:
-      - books
+      - Books
       responses:
         '200':
           description: Array of books
@@ -31,65 +29,51 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
-      summary: Add books to the collection
-      operationId: listBooks
+      summary: Create a Book
+      operationId: createBook
       tags:
-      - books
+      - Books
+      requestBody:
+        description: the book to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
       responses:
         '201':
-          description: Add book
+          description: The created book
           content:
             application/json:    
               schema:
-                $ref: "#/components/schemas/Error"
-    put:
-      summary: Insert new and replace an old book
-      operationId: listBooks
-      tags:
-      - books
-      responses:
-        '200':
-          description: Array of books
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/ResponseBooks"
+                $ref: "#/components/schemas/ResponseBook"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    patch:
-      summary: Change information about the book
-      operationId: listBooks
+  /books/{bookId}:
+    get:
+      summary: Get a Book
+      operationId: getBook
       tags:
-      - books
+        - Books
+      parameters:
+      - name: bookId
+        in: path
+        description: book id
+        required: true
+        schema:
+          type: string
+          format: int64
       responses:
         '200':
-          description: Array of books
+          description: The found book
           content:
             application/json:    
               schema:
-                $ref: "#/components/schemas/ResponseBooks"
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      summary: Remove book
-      operationId: listBooks
-      tags:
-      - books
-      responses:
-        '200':
-          description: Array of books
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/ResponseBooks"
+                $ref: "#/components/schemas/ResponseBook"
         default:
           description: unexpected error
           content:
@@ -97,22 +81,110 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+    patch:
+      summary: Update a book
+      operationId: patchBook
+      tags:
+        - Books
+      parameters:
+      - name: bookId
+        in: path
+        description: book id
+        required: true
+        schema:
+          type: string
+          format: int64
+      requestBody:
+        description: the book to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: The updated book
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseBook"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a Post
+      operationId: deletePost
+      tags:
+        - Books
+      parameters:
+      - name: bookId
+        in: path
+        description: book id
+        required: true
+        schema:
+          type: string
+          format: int64
+      responses:
+        '200':
+          description: The deleted book
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseBook"
+        '204':
+          description: No change (nothing was deleted)
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  #Förstår inte varför jag inte kan filtrera mellan namn
+  /books/{BookName}:
+    get:
+      summary: Get a Book
+      operationId: getBookName
+      tags:
+        - Books
+      parameters:
+        - in: path
+          name: BookName
+          required: true
+          schema:
+            type: string
+          allowReserved: true 
+      responses:
+        '200':
+          description: The found book
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseBook"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Book: # A single book
       type: object
       properties:
-        ISBN: 
+        ISBN:
           type: string
-        Title: 
+        Title:
           type: string
-        Author: 
+        Author:
           type: string
-        Price: 
+        Price:
           type: number
         SellerEmail: 
           type: string
-        Used: 
+        Used:
           type: boolean
         Location:
           type: object
