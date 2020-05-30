@@ -42,7 +42,7 @@ paths:
               $ref: '#/components/schemas/Book'
       responses:
         '201':
-          description: The created book
+          description: Created
           content:
             application/json:    
               schema:
