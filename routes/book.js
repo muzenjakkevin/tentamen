@@ -8,8 +8,6 @@ get = (req, res, next) => {
   if(req.query.Author){
     search = {Author: req.query.Author}
   }
-
-
   req.models.Book.find(search).then((books) => {
       return res.send(books);
     }).catch((error) => {
@@ -44,11 +42,21 @@ patch = (req, res, next) => {
       $set: dotify(req.body)
     },
     {
-      returnNewDocument: true,
-      new: true
-    }).then((book) => {
-      console.log("user after the request: ", book)
-      res.send(book)
+      new: true,
+      upsert: true,
+      runvalidators: true,
+    }).then((status) => {
+      console.log("status: ", status)
+      if (status.upserted) {
+        res.status(201)
+       } else if (status.nModified) {
+        res.status(200)
+       } else {
+        res.status(204)
+      }
+      req.models.Book.findById(req.params.id).then((book) => {
+        res.send(book)
+      })
     }).catch((error) => next(error))
 }
 

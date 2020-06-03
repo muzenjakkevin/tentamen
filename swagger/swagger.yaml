@@ -1,4 +1,4 @@
-openapi: "3.0.0"
+swagger: "2.0"
 info:
   version: 1.0.0
   title: BookLibrary
@@ -7,32 +7,32 @@ info:
   license:
     name: MIT
 servers:
-- url: http://localhost:3000
-paths:
-  /books:
-    get:
-      summary: List books
-      operationId: listBooks
-      tags:
-      - Books
-      responses:
-        '200':
-          description: Array of books
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/ResponseBooks"
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    post:
-      summary: Create a Book
-      operationId: createBook
-      tags:
-      - Books
+  - url: http://localhost:3000
+  paths:
+    /books:
+      get:
+        summary: List books
+        operationId: listBooks
+        tags:
+        - Books
+        responses:
+          '200':
+            description: Array of books
+            content:
+              application/json:    
+                schema:
+                  $ref: "#/components/schemas/ResponseBooks"
+          default:
+            description: unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+      post:
+        summary: Create a Book
+        operationId: createBook
+        tags:
+        - Books
       requestBody:
         description: the book to create
         required: true
@@ -53,20 +53,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /books/{bookId}:
-    get:
-      summary: Get a Book
-      operationId: getBook
-      tags:
+    /books/{bookId}:
+      get:
+        summary: Get a Book
+        operationId: getBook
+        tags:
         - Books
-      parameters:
-      - name: bookId
-        in: path
-        description: book id
-        required: true
-        schema:
-          type: string
-          format: int64
+        parameters:
+        - name: bookId
+          in: path
+          description: book id
+          required: true
+          schema:
+            type: string
+            format: int64
       responses:
         '200':
           description: The found book
@@ -85,7 +85,7 @@ paths:
       summary: Update a book
       operationId: patchBook
       tags:
-        - Books
+      - Books
       parameters:
       - name: bookId
         in: path
@@ -118,7 +118,7 @@ paths:
       summary: Delete a Post
       operationId: deletePost
       tags:
-        - Books
+      - Books
       parameters:
       - name: bookId
         in: path
@@ -135,40 +135,67 @@ paths:
               schema:
                 $ref: "#/components/schemas/ResponseBook"
         '204':
-          description: No change (nothing was deleted)
+        description: No change (nothing was deleted)
         default:
           description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
   #Förstår inte varför jag inte kan filtrera mellan namn
-  /books/{BookName}:
+
+  /books/{Author}:
     get:
       summary: Get a Book
-      operationId: getBookName
+      operationId: bookAuthor
       tags:
-        - Books
+      - Books
       parameters:
-        - in: path
-          name: BookName
-          required: true
-          schema:
-            type: string
-          allowReserved: true 
+      - in: query
+        name: Author
+        required: true
+        schema:
+          type: string
+        allowedReserved: true
       responses:
         '200':
           description: The found book
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/ResponseBook"
+            content:
+                application/json:    
+                  schema:
+                    $ref: "#/components/schemas/ResponseBook"
         default:
           description: unexpected error
           content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+  /books/{Title}:
+    get:
+      summary: Get a Book
+      operationId: bookTitle
+      tags:
+      - Books
+      parameters:
+      - in: query
+        name: Title
+        required: true
+        schema:
+          type: string
+        allowedReserved: true
+      responses:
+        '200':
+          description: The found book
+            content:
+                application/json:    
+                  schema:
+                    $ref: "#/components/schemas/ResponseBook"
+        default:
+          description: unexpected error
+          content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
 components:
   schemas:
     Book: # A single book
